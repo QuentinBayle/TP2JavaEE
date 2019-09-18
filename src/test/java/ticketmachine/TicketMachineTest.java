@@ -56,11 +56,10 @@ public class TicketMachineTest {
         //S6
 	public void MontantCollecte() {
 		assertEquals(0, machine.getTotal());
-                machine.insertMoney(PRICE * 2);
+                machine.insertMoney(PRICE);
                 assertEquals(0, machine.getTotal());
 		machine.printTicket();
-                machine.printTicket();
-		assertEquals(PRICE * 2, machine.getTotal());
+		assertEquals(PRICE , machine.getTotal());
 	}
             
 	@Test
