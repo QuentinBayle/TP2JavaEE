@@ -29,5 +29,75 @@ public class TicketMachineTest {
 		machine.insertMoney(20);
 		assertEquals("La balance n'est pas correctement mise à jour", 10 + 20, machine.getBalance()); // Les montants ont été correctement additionnés               
 	}
+        
+        @Test
+        // S3
+	public void MontantInsuffifantPasDeTicket(){
+            machine.insertMoney(PRICE-1);
+            assertFalse(machine.printTicket());
+	}
+        
+        @Test
+        //S4
+        public void MontantSuffisantTicket(){
+            machine.insertMoney(PRICE);
+            assertTrue(machine.printTicket());
+        }
+        
+        @Test
+        //S5
+        public void BalanceDecrementeePrix(){
+            machine.insertMoney(60);
+            machine.printTicket();
+            assertEquals("La balance n'est pas correctement décrémentée", 60-PRICE, machine.getBalance());
+        }
+         
+        @Test
+        //S6
+	public void MontantCollecte() {
+		assertEquals(0, machine.getTotal());
+                machine.insertMoney(PRICE * 2);
+                assertEquals(0, machine.getTotal());
+		machine.printTicket();
+                machine.printTicket();
+		assertEquals(PRICE * 2, machine.getTotal());
+	}
+            
+	@Test
+        //S7
+	public void RendMonnaie() {
+		int montant = 10;
+		machine.insertMoney(montant);
+		assertEquals(montant, machine.refund());
+	}
+        
+	@Test
+        //S8
+	public void BalanceZero() {
+		machine.insertMoney(60);
+		machine.printTicket();
+		assertEquals(40 + 20 - PRICE, machine.refund());
+		assertEquals(0, machine.getBalance());
+	}	
+        
+	@Test
+        //S9
+	public void MontantNegatifErreur() {
+		try {
+			machine.insertMoney(-1);
+			fail("Erreur");
+		} catch (IllegalArgumentException e) {
+		}
+	}
+      
 
+	@Test 
+        //S10
+	public void TicketPrixNegatif() {
+		try {
+			new TicketMachine(0);
+			fail("Le ticket est positif ce n'est pas normal");
+		} catch (IllegalArgumentException e) {
+		}
+	}	
 }
